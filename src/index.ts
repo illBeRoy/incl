@@ -27,4 +27,4 @@ const include = (src: string): Promise<void> => {
 };
 
 
-export {include};
+export { include };
