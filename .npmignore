@@ -1,2 +1,4 @@
 src
-**/*.spec.js
+**/*.spec.*
+.idea
+.travis.yml
