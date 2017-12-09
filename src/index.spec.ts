@@ -10,11 +10,8 @@ describe('include(url)', () => {
 
   beforeAll(() =>
     nock(validUrl)
-      .get(/.*/)
-      .reply(200, 'console.log("success");'));
-
-  afterEach(() =>
-    nock.cleanAll());
+      .get('')
+      .reply(200));
 
   describe('upon invocation', () => {
 
