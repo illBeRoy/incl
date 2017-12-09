@@ -1,7 +1,7 @@
 incl
 ====
 
-[![Travis](https://img.shields.io/travis/illberoy/incl?style=flat-square)](https://travis-ci.org/illberoy/incl)
+[![Travis](https://img.shields.io/travis/illBeRoy/incl.svg?style=flat-square)](https://travis-ci.org/illBeRoy/incl/)
 
 Handle your runtime cdn dependencies with care, and never again embed them using script tags.
 

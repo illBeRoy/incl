@@ -1,6 +1,6 @@
 {
   "name": "incl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "promise-based include scripts asynchronously in browser",
   "main": "dist/index.js",
   "repository": "git@github.com:illberoy/incl",
