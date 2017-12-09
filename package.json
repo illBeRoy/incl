@@ -1,8 +1,9 @@
 {
   "name": "incl",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "promise-based include scripts asynchronously in browser",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "git@github.com:illberoy/incl",
   "author": "Roy Sommer",
   "license": "MIT",
