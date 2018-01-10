@@ -40,9 +40,12 @@ describe('include(url)', () => {
 
       const someValidUrl = Chance().pickone([validUrl, validCssUrl]);
 
-      await include(someValidUrl);
-      await include(someValidUrl);
-      await include(someValidUrl);
+      await
+        Promise.all([
+          include(someValidUrl),
+          include(someValidUrl),
+          include(someValidUrl)
+        ]);
 
       expect(document.querySelectorAll(`script[src="${someValidUrl}"], link[href="${someValidUrl}"]`).length)
         .toEqual(1);

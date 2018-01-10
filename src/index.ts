@@ -21,7 +21,7 @@ const include = (src: string): Promise<void> => {
 
     document.head.appendChild(importNode);
 
-    return new Promise<void>((resolve, reject) => {
+    const inclusionPromise = new Promise<void>((resolve, reject) => {
 
       importNode.onload = () => resolve();
       importNode.onerror = err => {
@@ -30,9 +30,13 @@ const include = (src: string): Promise<void> => {
         reject(err);
       };
     });
+
+    importNode['__promise'] = inclusionPromise;
+
+    return inclusionPromise;
   } else {
 
-    return Promise.resolve();
+    return existingImportNode['__promise'] || Promise.resolve();
   }
 };
 
