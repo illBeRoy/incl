@@ -1,42 +1,47 @@
+interface PromiseMap<T> {
+  [key: string]: Promise<T>
+}
+
+const inclusionPromises: PromiseMap<void> = {};
+
 const include = (src: string): Promise<void> => {
 
-  const existingImportNode =
-    document.querySelector(`script[src="${src}"], link[href="${src}"]`);
+  const alreadyIncluded =
+    !!(inclusionPromises[src]);
 
-  if (existingImportNode === null) {
+  if (alreadyIncluded) {
 
-    let importNode: HTMLElement;
+    return inclusionPromises[src];
+  } else {
+
+    let elementThatIncludesTheSource: HTMLElement;
 
     if (src.split('?')[0].endsWith('.css')) {
 
-      importNode = document.createElement('link');
-      importNode.setAttribute('rel', 'stylesheet');
-      importNode.setAttribute('href', src);
+      elementThatIncludesTheSource = document.createElement('link');
+      elementThatIncludesTheSource.setAttribute('rel', 'stylesheet');
+      elementThatIncludesTheSource.setAttribute('href', src);
     } else {
 
-      importNode = document.createElement('script');
-      importNode.setAttribute('type', 'text/javascript');
-      importNode.setAttribute('src', src);
+      elementThatIncludesTheSource = document.createElement('script');
+      elementThatIncludesTheSource.setAttribute('type', 'text/javascript');
+      elementThatIncludesTheSource.setAttribute('src', src);
     }
 
-    document.head.appendChild(importNode);
+    document.head.appendChild(elementThatIncludesTheSource);
 
-    const inclusionPromise = new Promise<void>((resolve, reject) => {
+    inclusionPromises[src] = new Promise<void>((resolve, reject) => {
 
-      importNode.onload = () => resolve();
-      importNode.onerror = err => {
+      elementThatIncludesTheSource.onload = () => resolve();
+      elementThatIncludesTheSource.onerror = err => {
 
-        importNode.parentNode.removeChild(importNode);
+        elementThatIncludesTheSource.parentNode.removeChild(elementThatIncludesTheSource);
+        delete inclusionPromises[src];
         reject(err);
       };
     });
 
-    importNode['__promise'] = inclusionPromise;
-
-    return inclusionPromise;
-  } else {
-
-    return existingImportNode['__promise'] || Promise.resolve();
+    return inclusionPromises[src];
   }
 };
 

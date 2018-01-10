@@ -1,6 +1,6 @@
 {
   "name": "incl",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "promise-based include scripts asynchronously in browser",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
