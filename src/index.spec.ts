@@ -6,29 +6,46 @@ import { include } from '.';
 describe('include(url)', () => {
 
   const validUrl = Chance().url();
+  const validCssUrl = `${Chance().url()}/${Chance().word()}.css`;
   const invalidUrl = Chance().url();
 
-  beforeAll(() =>
+  beforeAll(() => {
+
     nock(validUrl)
       .get('')
-      .reply(200));
+      .reply(200);
+
+    nock(validCssUrl)
+      .get('')
+      .reply(200)
+  });
 
   describe('upon invocation', () => {
 
-    it('should load given url into script tag', async () => {
+    it('should load given url into script tag by default', async () => {
 
       await include(validUrl);
 
       expect(document.querySelectorAll(`script[src="${validUrl}"]`).length).toEqual(1);
     });
 
+    it('should load given url into link tag if is css', async () => {
+
+      await include(validCssUrl);
+
+      expect(document.querySelectorAll(`link[rel="stylesheet"][href="${validCssUrl}"]`).length).toEqual(1);
+    });
+
     it('should not load a given url more than once', async () => {
 
-      await include(validUrl);
-      await include(validUrl);
-      await include(validUrl);
+      const someValidUrl = Chance().pickone([validUrl, validCssUrl]);
 
-      expect(document.querySelectorAll(`script[src="${validUrl}"]`).length).toEqual(1);
+      await include(someValidUrl);
+      await include(someValidUrl);
+      await include(someValidUrl);
+
+      expect(document.querySelectorAll(`script[src="${someValidUrl}"], link[href="${someValidUrl}"]`).length)
+        .toEqual(1);
     });
 
   });

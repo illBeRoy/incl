@@ -1,22 +1,32 @@
 const include = (src: string): Promise<void> => {
 
-  const existingScriptNode =
-    document.querySelector(`script[src="${src}"]`);
+  const existingImportNode =
+    document.querySelector(`script[src="${src}"], link[href="${src}"]`);
 
-  if (existingScriptNode === null) {
+  if (existingImportNode === null) {
 
-    const scriptNode = document.createElement('script');
-    scriptNode.type = 'text/javascript';
-    scriptNode.src = src;
+    let importNode: HTMLElement;
 
-    document.head.appendChild(scriptNode);
+    if (src.split('?')[0].endsWith('.css')) {
+
+      importNode = document.createElement('link');
+      importNode.setAttribute('rel', 'stylesheet');
+      importNode.setAttribute('href', src);
+    } else {
+
+      importNode = document.createElement('script');
+      importNode.setAttribute('type', 'text/javascript');
+      importNode.setAttribute('src', src);
+    }
+
+    document.head.appendChild(importNode);
 
     return new Promise<void>((resolve, reject) => {
 
-      scriptNode.onload = () => resolve();
-      scriptNode.onerror = err => {
+      importNode.onload = () => resolve();
+      importNode.onerror = err => {
 
-        scriptNode.parentNode.removeChild(scriptNode);
+        importNode.parentNode.removeChild(importNode);
         reject(err);
       };
     });
